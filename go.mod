@@ -11,6 +11,8 @@ require (
 	golang.org/x/exp v0.0.0-20230310171629-522b1b587ee0
 )
 
+require github.com/gorilla/websocket v1.4.2 // indirect
+
 require (
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
@@ -38,6 +40,8 @@ require (
 )
 
 require (
+	github.com/bwmarrin/discordgo v0.27.1
+	github.com/georgysavva/scany/v2 v2.0.0
 	github.com/go-playground/validator/v10 v10.11.2
 	github.com/infinitybotlist/genconfig v0.0.0-20230312045948-20cdb56f90d3
 	github.com/jackc/pgpassfile v1.0.0 // indirect

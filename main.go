@@ -5,6 +5,7 @@ import (
 	"jobcord/api"
 	"jobcord/constants"
 	"jobcord/routes/diagnostics"
+	"jobcord/routes/users"
 	"jobcord/state"
 	"jobcord/types"
 	"net/http"
@@ -104,6 +105,7 @@ Welcome to the JobCord API docs! Mostly for internal purposes
 	routers := []api.APIRouter{
 		// Use same order as routes folder
 		diagnostics.Router{},
+		users.Router{},
 	}
 
 	for _, router := range routers {
