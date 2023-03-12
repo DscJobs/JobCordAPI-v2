@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"jobcord/api"
 	"jobcord/constants"
+	"jobcord/routes/diagnostics"
 	"jobcord/state"
 	"jobcord/types"
 	"net/http"
@@ -84,6 +86,23 @@ Welcome to the JobCord API docs! Mostly for internal purposes
 		zapchi.Logger(state.Logger, "api"),
 		middleware.Timeout(30*time.Second),
 	)
+
+	routers := []api.APIRouter{
+		// Use same order as routes folder
+		diagnostics.Router{},
+	}
+
+	for _, router := range routers {
+		name, desc := router.Tag()
+		if name != "" {
+			docs.AddTag(name, desc)
+			api.CurrentTag = name
+		} else {
+			panic("Router tag name cannot be empty")
+		}
+
+		router.Routes(r)
+	}
 
 	// Load openapi here to avoid large marshalling in every request
 	var err error
