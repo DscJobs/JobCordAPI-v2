@@ -64,11 +64,25 @@ func main() {
 	docs.DocsSetupData = &docs.SetupData{
 		URL:         state.Config.APIUrl,
 		ErrorStruct: types.ApiError{},
-		Description: `
+		Info: docs.Info{
+			Title:          "JobCord API",
+			TermsOfService: "https://jobcord.co/terms",
+			Version:        "4.0",
+			Description: `
 # Introduction
 
-Welcome to the JobCord API docs! Mostly for internal purposes
-`,
+Welcome to the JobCord API docs! Mostly for internal purposes			
+			`,
+			Contact: docs.Contact{
+				Name:  "JobCord",
+				URL:   "https://jobcord.co",
+				Email: "support@jobcord.co",
+			},
+			License: docs.License{
+				Name: "MIT",
+				URL:  "https://opensource.org/licenses/MIT",
+			},
+		},
 	}
 
 	docs.Setup()
