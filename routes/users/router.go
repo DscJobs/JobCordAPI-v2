@@ -3,6 +3,7 @@ package users
 import (
 	"jobcord/api"
 	"jobcord/routes/users/endpoints/get_user"
+	"jobcord/routes/users/endpoints/login"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -22,5 +23,13 @@ func (b Router) Routes(r *chi.Mux) {
 		Method:  api.GET,
 		Docs:    get_user.Docs,
 		Handler: get_user.Route,
+	}.Route(r)
+
+	api.Route{
+		Pattern: "/users",
+		OpId:    "login",
+		Method:  api.PUT,
+		Docs:    login.Docs,
+		Handler: login.Route,
 	}.Route(r)
 }
