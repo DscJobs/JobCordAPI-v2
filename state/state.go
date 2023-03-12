@@ -6,9 +6,11 @@ import (
 
 	"jobcord/config"
 
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 	"github.com/infinitybotlist/genconfig"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"gopkg.in/yaml.v3"
 )
 
@@ -17,6 +19,7 @@ var (
 	Context   = context.Background()
 	Validator = validator.New()
 	Config    *config.Config
+	Logger    *zap.SugaredLogger
 )
 
 func Setup() {
@@ -47,4 +50,14 @@ func Setup() {
 	}
 
 	Pool = p
+
+	w := zapcore.AddSync(os.Stdout)
+
+	core := zapcore.NewCore(
+		zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()),
+		w,
+		zap.DebugLevel,
+	)
+
+	Logger = zap.New(core).Sugar()
 }
