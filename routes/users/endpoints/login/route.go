@@ -31,6 +31,7 @@ type LoginReq struct {
 	Code        string `json:"code" validate:"required"`
 	RedirectUri string `json:"redirect_uri" validate:"required"`
 	Nonce       string `json:"nonce" validate:"required"`
+	ClientID    string `json:"client_id" validate:"required" msg:"Client ID must be the Client ID to login to"`
 }
 
 func Docs() *docs.Doc {
