@@ -3,6 +3,7 @@ package login
 import (
 	"io"
 	"jobcord/api"
+	"jobcord/config"
 	"jobcord/state"
 	"jobcord/types"
 	"jobcord/utils"
@@ -74,9 +75,39 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 		}
 	}
 
+	// Find client ID in config
+	var client *config.LoginClient
+
+	for _, c := range state.Config.LoginClients {
+		if c.ClientID == req.ClientID {
+			client = &c
+			break
+		}
+	}
+
+	if client == nil {
+		return api.HttpResponse{
+			Json: types.ApiError{
+				Error:   true,
+				Message: "Invalid client ID",
+			},
+			Status: http.StatusBadRequest,
+		}
+	}
+
+	if client.RedirectURL != req.RedirectUri {
+		return api.HttpResponse{
+			Json: types.ApiError{
+				Error:   true,
+				Message: "Invalid redirect URI",
+			},
+			Status: http.StatusBadRequest,
+		}
+	}
+
 	response, err := http.PostForm("https://discord.com/api/v10/oauth2/token", url.Values{
-		"client_id":     {state.Config.ClientID},
-		"client_secret": {state.Config.ClientSecret},
+		"client_id":     {client.ClientID},
+		"client_secret": {client.ClientSecret},
 		"grant_type":    {"authorization_code"},
 		"code":          {req.Code},
 		"redirect_uri":  {req.RedirectUri},
