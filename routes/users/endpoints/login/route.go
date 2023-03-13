@@ -188,7 +188,7 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 	var apitoken string
 	if count == 0 {
 		apitoken = crypto.RandString(255)
-		_, err = state.Pool.Exec(d.Context, "INSERT INTO users (userID, token) VALUES ($1, $2)", userData.ID, token)
+		_, err = state.Pool.Exec(d.Context, "INSERT INTO users (userID, token) VALUES ($1, $2)", userData.ID, apitoken)
 
 		if err != nil {
 			state.Logger.Error(err)
