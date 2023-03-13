@@ -96,6 +96,7 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 	}
 
 	if client.RedirectURL != req.RedirectUri {
+		state.Logger.Info("Expected redirect URI: "+client.RedirectURL, " but got "+req.RedirectUri)
 		return api.HttpResponse{
 			Json: types.ApiError{
 				Error:   true,
