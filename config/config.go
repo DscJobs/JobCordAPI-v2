@@ -6,8 +6,8 @@ type Config struct {
 	RedisURL     string                 `yaml:"redis_url" default:"redis://localhost:6379/2" comment:"Redis URL" validate:"required"`
 	Port         string                 `yaml:"port" default:":5848" comment:"Port to run the server on" validate:"required"`
 	APIUrl       string                 `yaml:"api_url" default:"https://api.jobcord.co" comment:"URL of the API" validate:"required"`
-	PopplioURL   string                 `yaml:"popplio_url" default:"http://127.0.0.1:8081" comment:"URL of the Popplio server" validate:"required"`
 	LoginClients map[string]LoginClient `yaml:"login_clients" comment:"Login clients" validate:"required"`
+	MainServer   string                 `yaml:"main_server" comment:"Main server ID" validate:"required"`
 }
 
 type LoginClient struct {

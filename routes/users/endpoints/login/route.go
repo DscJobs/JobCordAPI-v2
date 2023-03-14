@@ -6,12 +6,12 @@ import (
 	"jobcord/config"
 	"jobcord/state"
 	"jobcord/types"
-	"jobcord/utils"
 	"net/http"
 	"net/url"
 
 	"github.com/go-playground/validator/v10"
 	docs "github.com/infinitybotlist/doclib"
+	"github.com/infinitybotlist/dovewing"
 	"github.com/infinitybotlist/eureka/crypto"
 	jsoniter "github.com/json-iterator/go"
 )
@@ -22,10 +22,10 @@ var (
 )
 
 type UserAuth struct {
-	Token       string       `json:"token" validate:"required"`
-	AccessToken string       `json:"access_token" validate:"required"`
-	ID          string       `json:"id" validate:"required"`
-	User        *types.IUser `json:"user" validate:"required"`
+	Token       string                `json:"token" validate:"required"`
+	AccessToken string                `json:"access_token" validate:"required"`
+	ID          string                `json:"id" validate:"required"`
+	User        *dovewing.DiscordUser `json:"user" validate:"required"`
 }
 
 type LoginReq struct {
@@ -247,7 +247,7 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 		}
 	}
 
-	user, err := utils.GetDiscordUser(userData.ID)
+	user, err := dovewing.GetDiscordUser(d.Context, userData.ID)
 
 	if err != nil {
 		state.Logger.Error(err)

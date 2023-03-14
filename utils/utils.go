@@ -1,9 +1,6 @@
 package utils
 
 import (
-	"jobcord/state"
-	"jobcord/types"
-	"net/http"
 	"reflect"
 
 	jsoniter "github.com/json-iterator/go"
@@ -28,25 +25,4 @@ func GetCols(s any) []string {
 	}
 
 	return cols
-}
-
-// Using popplio for now until this service grows big enough to warrant its own
-func GetDiscordUser(id string) (*types.IUser, error) {
-	res, err := http.Get(state.Config.PopplioURL + "/_duser/" + id)
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer res.Body.Close()
-
-	var user types.IUser
-
-	err = json.NewDecoder(res.Body).Decode(&user)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &user, nil
 }

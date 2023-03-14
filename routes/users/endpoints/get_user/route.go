@@ -11,6 +11,7 @@ import (
 	"github.com/georgysavva/scany/v2/pgxscan"
 	"github.com/go-chi/chi/v5"
 	docs "github.com/infinitybotlist/doclib"
+	"github.com/infinitybotlist/dovewing"
 )
 
 var (
@@ -67,7 +68,7 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 		return api.DefaultResponse(http.StatusNotFound)
 	}
 
-	userObj, err := utils.GetDiscordUser(id)
+	userObj, err := dovewing.GetDiscordUser(d.Context, id)
 
 	if err != nil {
 		state.Logger.Error(err)
