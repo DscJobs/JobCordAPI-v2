@@ -6,7 +6,7 @@ import (
 	"jobcord/api"
 	"jobcord/state"
 
-	docs "github.com/infinitybotlist/doclib"
+	docs "github.com/infinitybotlist/eureka/doclib"
 
 	jsoniter "github.com/json-iterator/go"
 )

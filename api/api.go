@@ -16,7 +16,7 @@ import (
 	"jobcord/state"
 	"jobcord/types"
 
-	docs "github.com/infinitybotlist/doclib"
+	docs "github.com/infinitybotlist/eureka/doclib"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"

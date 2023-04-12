@@ -16,7 +16,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	docs "github.com/infinitybotlist/doclib"
+	docs "github.com/infinitybotlist/eureka/doclib"
 	"github.com/infinitybotlist/eureka/zapchi"
 	jsoniter "github.com/json-iterator/go"
 )

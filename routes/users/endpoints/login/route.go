@@ -10,9 +10,9 @@ import (
 	"net/url"
 
 	"github.com/go-playground/validator/v10"
-	docs "github.com/infinitybotlist/doclib"
-	"github.com/infinitybotlist/dovewing"
 	"github.com/infinitybotlist/eureka/crypto"
+	docs "github.com/infinitybotlist/eureka/doclib"
+	"github.com/infinitybotlist/eureka/dovewing"
 	jsoniter "github.com/json-iterator/go"
 )
 

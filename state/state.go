@@ -8,8 +8,8 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/go-playground/validator/v10"
-	"github.com/infinitybotlist/dovewing"
-	"github.com/infinitybotlist/genconfig"
+	"github.com/infinitybotlist/eureka/dovewing"
+	"github.com/infinitybotlist/eureka/genconfig"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
