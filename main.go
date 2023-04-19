@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"jobcord/api"
 	"jobcord/constants"
 	"jobcord/routes/diagnostics"
 	"jobcord/routes/users"
@@ -89,6 +90,8 @@ Welcome to the JobCord API docs! Mostly for internal purposes
 	docs.Setup()
 
 	docs.AddSecuritySchema("User", "User-Auth", "Requires a user token. Should be prefixed with `User ` in `Authorization` header.")
+
+	api.Setup()
 
 	r := chi.NewRouter()
 
