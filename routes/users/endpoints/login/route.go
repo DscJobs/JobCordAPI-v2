@@ -2,7 +2,6 @@ package login
 
 import (
 	"io"
-	"jobcord/api"
 	"jobcord/config"
 	"jobcord/state"
 	"jobcord/types"
@@ -13,12 +12,13 @@ import (
 	"github.com/infinitybotlist/eureka/crypto"
 	docs "github.com/infinitybotlist/eureka/doclib"
 	"github.com/infinitybotlist/eureka/dovewing"
+	"github.com/infinitybotlist/eureka/uapi"
 	jsoniter "github.com/json-iterator/go"
 )
 
 var (
 	json         = jsoniter.ConfigCompatibleWithStandardLibrary
-	compiledMsgs = api.CompileValidationErrors(LoginReq{})
+	compiledMsgs = uapi.CompileValidationErrors(LoginReq{})
 )
 
 type UserAuth struct {
@@ -44,10 +44,10 @@ func Docs() *docs.Doc {
 	}
 }
 
-func Route(d api.RouteData, r *http.Request) api.HttpResponse {
+func Route(d uapi.RouteData, r *http.Request) uapi.HttpResponse {
 	var req LoginReq
 
-	resp, ok := api.MarshalReq(r, &req)
+	resp, ok := uapi.MarshalReq(r, &req)
 
 	if !ok {
 		return resp
@@ -57,7 +57,7 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 
 	if err != nil {
 		errors := err.(validator.ValidationErrors)
-		return api.ValidatorErrorResponse(compiledMsgs, errors)
+		return uapi.ValidatorErrorResponse(compiledMsgs, errors)
 	}
 
 	// Get access token from code
@@ -66,7 +66,7 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 	}
 
 	if req.Nonce != "winterwatcher" {
-		return api.HttpResponse{
+		return uapi.HttpResponse{
 			Json: types.ApiError{
 				Error:   true,
 				Message: "Your client is outdated and is not supported. Please update your client.",
@@ -86,7 +86,7 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 	}
 
 	if client == nil {
-		return api.HttpResponse{
+		return uapi.HttpResponse{
 			Json: types.ApiError{
 				Error:   true,
 				Message: "Invalid client ID",
@@ -97,7 +97,7 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 
 	if client.RedirectURL != req.RedirectUri {
 		state.Logger.Info("Expected redirect URI: "+client.RedirectURL, " but got "+req.RedirectUri)
-		return api.HttpResponse{
+		return uapi.HttpResponse{
 			Json: types.ApiError{
 				Error:   true,
 				Message: "Invalid redirect URI",
@@ -117,7 +117,7 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 
 	if err != nil {
 		state.Logger.Error(err)
-		return api.DefaultResponse(http.StatusInternalServerError)
+		return uapi.DefaultResponse(http.StatusInternalServerError)
 	}
 
 	defer response.Body.Close()
@@ -127,10 +127,10 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 
 		if err != nil {
 			state.Logger.Error(err)
-			return api.DefaultResponse(http.StatusInternalServerError)
+			return uapi.DefaultResponse(http.StatusInternalServerError)
 		}
 
-		return api.HttpResponse{
+		return uapi.HttpResponse{
 			Status: http.StatusUnauthorized,
 			Json: types.ApiError{
 				Message: string(bytes),
@@ -143,11 +143,11 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 
 	if err != nil {
 		state.Logger.Error(err)
-		return api.DefaultResponse(http.StatusInternalServerError)
+		return uapi.DefaultResponse(http.StatusInternalServerError)
 	}
 
 	if token.AccessToken == "" {
-		return api.HttpResponse{
+		return uapi.HttpResponse{
 			Status: http.StatusUnauthorized,
 			Json: types.ApiError{
 				Message: "Invalid access token",
@@ -168,7 +168,7 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 
 	if err != nil {
 		state.Logger.Error(err)
-		return api.HttpResponse{
+		return uapi.HttpResponse{
 			Json: types.ApiError{
 				Error:   true,
 				Message: "Failed to create request to Discord to fetch user info",
@@ -185,7 +185,7 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 
 	if err != nil {
 		state.Logger.Error(err)
-		return api.HttpResponse{
+		return uapi.HttpResponse{
 			Json: types.ApiError{
 				Error:   true,
 				Message: "Failed to create request to Discord to fetch user info",
@@ -200,7 +200,7 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 
 	if err != nil {
 		state.Logger.Error(err)
-		return api.HttpResponse{
+		return uapi.HttpResponse{
 			Json: types.ApiError{
 				Error:   true,
 				Message: "Failed to create request to Discord to fetch user info",
@@ -215,7 +215,7 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 
 	if err != nil {
 		state.Logger.Error(err)
-		return api.DefaultResponse(http.StatusInternalServerError)
+		return uapi.DefaultResponse(http.StatusInternalServerError)
 	}
 
 	var apitoken string
@@ -225,7 +225,7 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 
 		if err != nil {
 			state.Logger.Error(err)
-			return api.DefaultResponse(http.StatusInternalServerError)
+			return uapi.DefaultResponse(http.StatusInternalServerError)
 		}
 	} else {
 		var banned bool
@@ -233,11 +233,11 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 
 		if err != nil {
 			state.Logger.Error(err)
-			return api.DefaultResponse(http.StatusInternalServerError)
+			return uapi.DefaultResponse(http.StatusInternalServerError)
 		}
 
 		if banned {
-			return api.HttpResponse{
+			return uapi.HttpResponse{
 				Json: types.ApiError{
 					Error:   true,
 					Message: "You are banned from using this API.",
@@ -251,10 +251,10 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 
 	if err != nil {
 		state.Logger.Error(err)
-		return api.DefaultResponse(http.StatusInternalServerError)
+		return uapi.DefaultResponse(http.StatusInternalServerError)
 	}
 
-	return api.HttpResponse{
+	return uapi.HttpResponse{
 		Json: UserAuth{
 			User:        user,
 			ID:          userData.ID,

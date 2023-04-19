@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"jobcord/api"
 	"jobcord/constants"
 	"jobcord/routes/diagnostics"
 	"jobcord/routes/users"
@@ -17,6 +16,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	docs "github.com/infinitybotlist/eureka/doclib"
+	"github.com/infinitybotlist/eureka/uapi"
 	"github.com/infinitybotlist/eureka/zapchi"
 	jsoniter "github.com/json-iterator/go"
 )
@@ -102,7 +102,7 @@ Welcome to the JobCord API docs! Mostly for internal purposes
 		middleware.Timeout(30*time.Second),
 	)
 
-	routers := []api.APIRouter{
+	routers := []uapi.APIRouter{
 		// Use same order as routes folder
 		diagnostics.Router{},
 		users.Router{},
@@ -112,7 +112,7 @@ Welcome to the JobCord API docs! Mostly for internal purposes
 		name, desc := router.Tag()
 		if name != "" {
 			docs.AddTag(name, desc)
-			api.CurrentTag = name
+			uapi.CurrentTag = name
 		} else {
 			panic("Router tag name cannot be empty")
 		}

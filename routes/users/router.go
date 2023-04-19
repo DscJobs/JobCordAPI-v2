@@ -1,11 +1,11 @@
 package users
 
 import (
-	"jobcord/api"
 	"jobcord/routes/users/endpoints/get_user"
 	"jobcord/routes/users/endpoints/login"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/infinitybotlist/eureka/uapi"
 )
 
 const tagName = "Users"
@@ -17,18 +17,18 @@ func (b Router) Tag() (string, string) {
 }
 
 func (b Router) Routes(r *chi.Mux) {
-	api.Route{
+	uapi.Route{
 		Pattern: "/users/{id}",
 		OpId:    "get_user",
-		Method:  api.GET,
+		Method:  uapi.GET,
 		Docs:    get_user.Docs,
 		Handler: get_user.Route,
 	}.Route(r)
 
-	api.Route{
+	uapi.Route{
 		Pattern: "/users",
 		OpId:    "login",
-		Method:  api.PUT,
+		Method:  uapi.PUT,
 		Docs:    login.Docs,
 		Handler: login.Route,
 	}.Route(r)

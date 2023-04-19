@@ -10,10 +10,10 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/infinitybotlist/eureka/dovewing"
 	"github.com/infinitybotlist/eureka/genconfig"
+	"github.com/infinitybotlist/eureka/snippets"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 	"gopkg.in/yaml.v3"
 )
 
@@ -83,15 +83,7 @@ func Setup() {
 		}
 	}()
 
-	w := zapcore.AddSync(os.Stdout)
-
-	core := zapcore.NewCore(
-		zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()),
-		w,
-		zap.DebugLevel,
-	)
-
-	Logger = zap.New(core).Sugar()
+	Logger = snippets.CreateZap()
 
 	// Load dovewing state
 	dovewing.SetState(&dovewing.State{

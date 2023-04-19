@@ -1,7 +1,6 @@
 package get_user
 
 import (
-	"jobcord/api"
 	"jobcord/state"
 	"jobcord/types"
 	"jobcord/utils"
@@ -12,6 +11,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	docs "github.com/infinitybotlist/eureka/doclib"
 	"github.com/infinitybotlist/eureka/dovewing"
+	"github.com/infinitybotlist/eureka/uapi"
 )
 
 var (
@@ -36,7 +36,7 @@ func Docs() *docs.Doc {
 	}
 }
 
-func Route(d api.RouteData, r *http.Request) api.HttpResponse {
+func Route(d uapi.RouteData, r *http.Request) uapi.HttpResponse {
 	var id = chi.URLParam(r, "id")
 
 	var count int
@@ -45,18 +45,18 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 
 	if err != nil {
 		state.Logger.Error(err)
-		return api.DefaultResponse(http.StatusInternalServerError)
+		return uapi.DefaultResponse(http.StatusInternalServerError)
 	}
 
 	if count == 0 {
-		return api.DefaultResponse(http.StatusNotFound)
+		return uapi.DefaultResponse(http.StatusNotFound)
 	}
 
 	row, err := state.Pool.Query(d.Context, "SELECT "+sqlColsStr+" FROM users WHERE userID = $1", id)
 
 	if err != nil {
 		state.Logger.Error(err)
-		return api.DefaultResponse(http.StatusInternalServerError)
+		return uapi.DefaultResponse(http.StatusInternalServerError)
 	}
 
 	var user = types.User{}
@@ -65,19 +65,19 @@ func Route(d api.RouteData, r *http.Request) api.HttpResponse {
 
 	if err != nil {
 		state.Logger.Error(err)
-		return api.DefaultResponse(http.StatusNotFound)
+		return uapi.DefaultResponse(http.StatusNotFound)
 	}
 
 	userObj, err := dovewing.GetDiscordUser(d.Context, id)
 
 	if err != nil {
 		state.Logger.Error(err)
-		return api.DefaultResponse(http.StatusInternalServerError)
+		return uapi.DefaultResponse(http.StatusInternalServerError)
 	}
 
 	user.User = userObj
 
-	return api.HttpResponse{
+	return uapi.HttpResponse{
 		Json: user,
 	}
 }
