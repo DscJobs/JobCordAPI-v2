@@ -1,6 +1,7 @@
 package users
 
 import (
+	"jobcord/routes/users/endpoints/get_cv"
 	"jobcord/routes/users/endpoints/get_user"
 	"jobcord/routes/users/endpoints/login"
 
@@ -23,6 +24,14 @@ func (b Router) Routes(r *chi.Mux) {
 		Method:  uapi.GET,
 		Docs:    get_user.Docs,
 		Handler: get_user.Route,
+	}.Route(r)
+
+	uapi.Route{
+		Pattern: "/users/{id}/cv",
+		OpId:    "get_cv",
+		Method:  uapi.GET,
+		Docs:    get_cv.Docs,
+		Handler: get_cv.Route,
 	}.Route(r)
 
 	uapi.Route{

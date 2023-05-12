@@ -37,7 +37,7 @@ type CV struct {
 	User      *dovewing.DiscordUser `json:"user" db:"-" description:"The user object."`
 	Overview  string                `json:"overview" db:"overview"`
 	Hire      string                `json:"hire" db:"hire"`
-	Birthday  pgtype.Text           `json:"birthday" db:"birthday"`
+	Birthday  time.Time             `json:"birthday" db:"birthday"`
 	Link      pgtype.Text           `json:"link" db:"link"`
 	Email     pgtype.Text           `json:"email" db:"email"`
 	Job       pgtype.Text           `json:"job" db:"job"`
